@@ -63,7 +63,7 @@ int aes128_ecb_decrypt(const std::uint8_t* key, std::uint8_t* in, int in_len, st
     out_len += temp;
 
     EVP_CIPHER_CTX_free(x);
-
+  
     return out_len;
 }
 
