@@ -104,12 +104,12 @@ process_file(const char *path) {
 	FILE *f = fopen(path, "r");
 	fread(&ulen, sizeof(ulen), 1, f);
 	if (ulen != (uint32_t)0x4e455443) {
-		printf("isn't netease cloud music copyright file!\n");
+		printf("This is not a Netease Cloud Music copyright protected file. Skipped. \n");
 		return 1;
 	}
 	fread(&ulen, sizeof(ulen), 1, f);
 	if (ulen != (uint32_t)0x4d414446) {
-		printf("isn't netease cloud music copyright file!\n");
+		printf("This is not a Netease Cloud Music copyright protected file. Skipped. \n");
 		return 1;
 	}
 	fseek(f, 2, SEEK_CUR);
@@ -266,7 +266,7 @@ process_file(const char *path) {
 
 		dynamic_cast<TagLib::FLAC::File*>(audioFile)->addPicture(cover);
 	} else {
-		printf("unknow file!\n");
+		printf("Unknown format\n");
 		return 2;
 	}
 
@@ -285,7 +285,9 @@ process_file(const char *path) {
 int
 main(int argc, char **argv) {
 	if (argc <= 1) {
-		printf("please input file path!\n");
+		printf("No file given. \n");
+		printf("Usage: ./ncmdump file_1 [file_2 ... file_n]\n");
+
 		return 1;
 	}
 
