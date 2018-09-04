@@ -12,4 +12,4 @@ Netease Cloud Music Copyright Protection File Dump
 
 ## 使用
 
-`ncmdump [file1 file2 ... filen]`
+`ncmdump file1 [file2 ... filen]`
