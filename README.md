@@ -10,11 +10,14 @@ Windows GUI版本 [ncmdump-gui](https://github.com/anonymous5l/ncmdump-gui)
 
 Windows GUI应用程序 [ncmdump-gui-release](https://github.com/anonymous5l/ncmdump-gui/releases/tag/fully) 运行库基于 `.NetFramework 4.6.1` 
 
-## 依赖库
+macOS GUI应用程序 [NCMDumperGUI-macOS-release](https://github.com/Co2333/NCMDumperGUI-macOS/blob/master/README.md) 需要macOS10.10及更高版本
+
+
+## 编译依赖库
 	* openssl
 	* taglib
 
-## 使用
+## 使用说明
 	ncmdump [files]...
 
 ## 微信捐赠
