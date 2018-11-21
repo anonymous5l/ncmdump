@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <assert.h>
 
 #include <openssl/bio.h>
 #include <openssl/evp.h>
@@ -16,6 +17,16 @@
 
 const uint8_t aes_core_key[17]   = { 0x68, 0x7A, 0x48, 0x52, 0x41, 0x6D, 0x73, 0x6F, 0x35, 0x6B, 0x49, 0x6E, 0x62, 0x61, 0x78, 0x57, 0};
 const uint8_t aes_modify_key[17] = { 0x23, 0x31, 0x34, 0x6C, 0x6A, 0x6B, 0x5F, 0x21, 0x5C, 0x5D, 0x26, 0x30, 0x55, 0x3C, 0x27, 0x28, 0};
+
+const char *s1 = "＼";
+const char *s2 = "／";
+const char *s3 = "？";
+const char *s4 = "：";
+const char *s5 = "＊";
+const char *s6 = "＂";
+const char *s7 = "＜";
+const char *s8 = "＞";
+const char *s9 = "｜";
 
 int
 base64_decode(uint8_t *in_str, int in_len, uint8_t *out_str) {
@@ -147,6 +158,7 @@ process_file(const char *path) {
 	cJSON *json_swap;
 	cJSON *music_info;
 	int artist_len;
+	size_t n;
 
 
 	data_len = base64_decode(modifyData + 22, ulen - 22, data);
@@ -186,7 +198,57 @@ process_file(const char *path) {
 
 	char music_filename[1024];
 	memset(music_filename, 0, 1024);
-	sprintf(music_filename, "%s.%s", music_name, format);
+	n = sprintf(music_filename, "%s.%s", music_name, format);
+
+	// filter special char
+
+	char filter_music_filename[1024];
+	memset(filter_music_filename, 0, 1024);
+
+	int t;
+	int j = 0;
+	char a;
+	for (i = 0; i < 1024; i++)
+	{
+		a = music_filename[j];
+
+		t = 3;
+
+		if (a != 0) {
+
+			if (a == '\\') {
+				memcpy(filter_music_filename+i, s1, t);
+			} else if (a == '/') {
+				memcpy(filter_music_filename+i, s2, t);
+			} else if (a == '?') {
+				memcpy(filter_music_filename+i, s3, t);
+			} else if (a == ':') {
+				memcpy(filter_music_filename+i, s4, t);
+			} else if (a == '*') {
+				memcpy(filter_music_filename+i, s5, t);
+			} else if (a == '\"') {
+				memcpy(filter_music_filename+i, s6, t);
+			} else if (a == '<') {
+				memcpy(filter_music_filename+i, s7, t);
+			} else if (a == '>') {
+				memcpy(filter_music_filename+i, s8, t);
+			} else if (a == '|') {
+				memcpy(filter_music_filename+i, s9, t);
+			} else {
+				t = 1;
+			}
+
+			i += t - 1;
+
+			if (t == 1) {
+				filter_music_filename[i] = a;
+			}
+
+			j++;
+		} else {
+			break;
+		}
+	}
 
 	// printf("\n     Album: %s\n", album);
 	// printf("    Artist: %s\n", artist);
@@ -195,7 +257,7 @@ process_file(const char *path) {
 	// printf("  Duration: %dms\n", duration);
 	// printf("Music Name: %s\n\n", music_name);
 
-	printf("%s\n", music_filename);
+	printf("%s\n", filter_music_filename);
 
 	// read crc32 check
 	fread(&ulen, sizeof(ulen), 1, f);
@@ -213,14 +275,14 @@ process_file(const char *path) {
 	// fclose(img);
 
 	uint8_t *box = build_key_box(de_key_data + 17, de_key_len - 17);
-
-	size_t n;
 	
 	n = 0x8000;
 	
 	uint8_t buffer[n];
 
-	FILE *fmusic = fopen(music_filename, "w+");
+	FILE *fmusic = fopen(filter_music_filename, "w+");
+
+	assert(fmusic != NULL);
 
 	while (n > 1) {
 		n = fread(buffer, 1, n, f);
@@ -244,7 +306,7 @@ process_file(const char *path) {
 	TagLib::ByteVector vector(img_data, static_cast<unsigned int>(img_len));
 
 	if (strcmp("mp3", format) == 0) {
-		audioFile = new TagLib::MPEG::File(music_filename);
+		audioFile = new TagLib::MPEG::File(filter_music_filename);
 
 		tag = dynamic_cast<TagLib::MPEG::File*>(audioFile)->ID3v2Tag(true);
 
@@ -255,7 +317,7 @@ process_file(const char *path) {
 
 		dynamic_cast<TagLib::ID3v2::Tag*>(tag)->addFrame(frame);
 	} else if (strcmp("flac", format) == 0) {
-		audioFile = new TagLib::FLAC::File(music_filename);
+		audioFile = new TagLib::FLAC::File(filter_music_filename);
 
 		tag = audioFile->tag();
 
