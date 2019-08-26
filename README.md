@@ -1,6 +1,28 @@
 Netease Cloud Music Copyright Protection File Dump
 ===========
 
+## 使用说明
+
+### LINUX
+
+sudo apt install libtag1-dev -y
+
+git clone https://github.com/heysion/ncmdump.git
+
+cd ncmdump
+
+sudo make install
+
+mkdir output && cd output
+
+fckncm ~/xx.ncm or fckncm ~/ncm_path/ # 支持多文件目录夹输入
+
+### Windows
+
+Bye
+
+
+
 ## 重要通知!!!
 尽量不要升级网易云，新版本貌似不会写入封面数据和音乐信息至ncm文件了。
 
