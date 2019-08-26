@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+from multiprocessing import Pool
+import subprocess
+
+def run_ncmdump(fpncm_file):
+    print("PID:{} [{}]".format(os.getpid(),fpncm_file))
+    subprocess.call(["/usr/local/bin/ncmdump",r"{}".format(fpncm_file)])
+    
+def run_main(ncmes):
+    #pncm_pool = Pool(1)
+    pncm_pool = Pool(os.cpu_count())
+    pncm_pool.map(run_ncmdump,ncmes)
+    pass
+
+def find_ncmdump_bin(ncmdumpbin):
+    if os.path.exists(ncmdumpbin) and os.path.isfile(ncmdumpbin):
+        return True
+    else:
+        return False
+    pass
+
+def get_ncm_list(fpncm_path,pncms):
+    for fpncm in os.listdir(fpncm_path):
+        if fpncm.endswith(".ncm"):
+            pncms.append("{}/{}".format(fpncm_path,fpncm))
+    return pncms
+
+if __name__ == "__main__":
+    if not find_ncmdump_bin("/usr/local/bin/ncmdump"):
+        print("not fount ncmdump bin")
+        print("please read README.md")
+        sys.exit(1)
+    ncm_file_list = []
+    if len(sys.argv) > 1:
+        for fpncm_path in sys.argv[1:]:
+            if os.path.exists(fpncm_path):
+                if os.path.isfile(fpncm_path):
+                    if not fpncm_path.endswith(".ncm"):
+                        print("ERROR: {} is not ncm file".format(fpncm_path))
+                        continue
+                    else:
+                        ncm_file_list.append(fpncm_path)
+                        continue
+                elif os.path.isdir(fpncm_path):
+                    get_ncm_list(fpncm_path,ncm_file_list)
+            else:
+                print("ERROR: {} is not found".format(fpncm_path))
+                sys.exit(1)
+    ncm_file_list = list(set(ncm_file_list))
+    print("start {} ncm task ".format(len(ncm_file_list)))
+    run_main(ncm_file_list)
+
+
