@@ -20,6 +20,10 @@ Android版本 [DroidNCM](https://github.com/bunnyblueair/DroidNCM)
 ## 依赖库
 	* taglib
 
+## MSBuild（MSVC）编译
+	参见[如何使用MSBuild编译](msbuild/如何使用MSBuild编译.md)
+	已经添加相应的.gitignore
+
 ## 使用
 	ncmdump [files]...
 
