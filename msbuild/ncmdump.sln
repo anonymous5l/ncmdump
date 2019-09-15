@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "说明", "说明", "{21DF08A8-F0A5-4B75-8927-A0A2FAD5B5E8}"
+	ProjectSection(SolutionItems) = preProject
+		如何使用MSBuild编译.md = 如何使用MSBuild编译.md
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ncmdump", "ncmdump\ncmdump.vcxproj", "{2832DF74-0FAF-4340-A29B-D690A1B9A0D2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "属性表", "属性表", "{A2C45679-7444-454C-8888-EAB322CB548A}"
+	ProjectSection(SolutionItems) = preProject
+		propsheets\CPP17_Buildout_ThirdPartylink.props = propsheets\CPP17_Buildout_ThirdPartylink.props
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2832DF74-0FAF-4340-A29B-D690A1B9A0D2}.Debug|x64.ActiveCfg = Debug|x64
+		{2832DF74-0FAF-4340-A29B-D690A1B9A0D2}.Debug|x64.Build.0 = Debug|x64
+		{2832DF74-0FAF-4340-A29B-D690A1B9A0D2}.Debug|x86.ActiveCfg = Debug|Win32
+		{2832DF74-0FAF-4340-A29B-D690A1B9A0D2}.Debug|x86.Build.0 = Debug|Win32
+		{2832DF74-0FAF-4340-A29B-D690A1B9A0D2}.Release|x64.ActiveCfg = Release|x64
+		{2832DF74-0FAF-4340-A29B-D690A1B9A0D2}.Release|x64.Build.0 = Release|x64
+		{2832DF74-0FAF-4340-A29B-D690A1B9A0D2}.Release|x86.ActiveCfg = Release|Win32
+		{2832DF74-0FAF-4340-A29B-D690A1B9A0D2}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A6CF2164-EA4F-4378-B381-714560B27AE2}
+	EndGlobalSection
+EndGlobal
