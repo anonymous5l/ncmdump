@@ -218,7 +218,7 @@ void NeteaseCrypt::FixMetadata() {
 		tag->setAlbum(TagLib::String(mMetaData->album(), TagLib::String::UTF8));
 	}
 
-	tag->setComment(TagLib::String("Create by netease copyright protected dump tool. author 5L", TagLib::String::UTF8));
+	tag->setComment(TagLib::String(m163key, TagLib::String::UTF8));
 
 	audioFile->save();
 }
@@ -345,6 +345,8 @@ NeteaseCrypt::NeteaseCrypt(std::string const& path) {
 		std::string modifyOutData;
 		std::string modifyDecryptData;
 
+		m163key = std::string(modifyData, n);
+		
 		swapModifyData = std::string(modifyData + 22, n - 22);
 
 		// escape `163 key(Don't modify):`

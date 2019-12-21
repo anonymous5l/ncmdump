@@ -47,6 +47,7 @@ private:
 	std::ifstream mFile;
 	unsigned char mKeyBox[256];
 	NeteaseMusicMetadata* mMetaData;
+	std::string m163key;
 
 private:
 	bool isNcmFile();
