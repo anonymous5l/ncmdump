@@ -3,10 +3,10 @@
 #include "base64.h"
 #include "cJSON.h"
 
-#include <taglib/mpegfile.h>
-#include <taglib/flacfile.h>
-#include <taglib/attachedpictureframe.h>
-#include <taglib/id3v2tag.h>
+#include <taglib/mpeg/mpegfile.h>
+#include <taglib/flac/flacfile.h>
+#include <taglib/mpeg/id3v2/frames/attachedpictureframe.h>
+#include <taglib/mpeg/id3v2/id3v2tag.h>
 #include <taglib/tag.h>
 
 #include <stdexcept>
@@ -224,7 +224,8 @@ void NeteaseCrypt::FixMetadata() {
 }
 
 void NeteaseCrypt::Dump() {
-	int n, i;
+	const int n = 0x8000;
+	int n1,i;
 
 	// mDumpFilepath.clear();
 	// mDumpFilepath.resize(1024);
@@ -245,7 +246,7 @@ void NeteaseCrypt::Dump() {
 	mDumpFilepath = fileNameWithoutExt(mFilepath);
 	// }
 
-	n = 0x8000;
+	
 	i = 0;
 
 	unsigned char buffer[n];
@@ -253,9 +254,9 @@ void NeteaseCrypt::Dump() {
 	std::ofstream output;
 
 	while (!mFile.eof()) {
-		n = read((char*)buffer, n);
+		n1 = read((char*)buffer, n);
 
-		for (i = 0; i < n; i++) {
+		for (i = 0; i < n1; i++) {
 			int j = (i + 1) & 0xff;
 			buffer[i] ^= mKeyBox[(mKeyBox[j] + mKeyBox[(mKeyBox[j] + j) & 0xff]) & 0xff];
 		}
@@ -274,7 +275,7 @@ void NeteaseCrypt::Dump() {
 			output.open(mDumpFilepath, output.out | output.binary);
 		}
 
-		output.write((char*)buffer, n);
+		output.write((char*)buffer, n1);
 	}
 
 	output.flush();
@@ -313,7 +314,8 @@ NeteaseCrypt::NeteaseCrypt(std::string const& path) {
 		throw std::invalid_argument("broken ncm file");
 	}
 
-	char keydata[n];
+	char* keydata = new char[n];
+	//char keydata[n];
 	read(keydata, n);
 
 	for (i = 0; i < n; i++) {
@@ -321,6 +323,7 @@ NeteaseCrypt::NeteaseCrypt(std::string const& path) {
 	}
 
 	std::string rawKeyData(keydata, n);
+	delete keydata;
 	std::string mKeyData;
 
 	aesEcbDecrypt(sCoreKey, rawKeyData, mKeyData);
@@ -334,7 +337,8 @@ NeteaseCrypt::NeteaseCrypt(std::string const& path) {
 
 		mMetaData = NULL;
 	} else {
-		char modifyData[n];
+
+		char* modifyData = new char[n];
 		read(modifyData, n);
 
 		for (i = 0; i < n; i++) {
@@ -347,6 +351,7 @@ NeteaseCrypt::NeteaseCrypt(std::string const& path) {
 
 		swapModifyData = std::string(modifyData + 22, n - 22);
 
+		delete(modifyData);
 		// escape `163 key(Don't modify):`
 		Base64::Decode(swapModifyData, modifyOutData);
 
