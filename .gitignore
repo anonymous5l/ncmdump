@@ -1,0 +1,6 @@
+# vs
+*.user
+*.vcxproj
+*.sln
+*.filters
+.vs
