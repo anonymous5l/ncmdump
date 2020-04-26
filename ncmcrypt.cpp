@@ -198,6 +198,17 @@ void NeteaseCrypt::FixMetadata() {
 
 			dynamic_cast<TagLib::ID3v2::Tag*>(tag)->addFrame(frame);
 		}
+		
+		if (mMetaData != NULL) {
+			tag->setTitle(TagLib::String(mMetaData->name(), TagLib::String::UTF8));
+			tag->setArtist(TagLib::String(mMetaData->artist(), TagLib::String::UTF8));
+			tag->setAlbum(TagLib::String(mMetaData->album(), TagLib::String::UTF8));
+		}
+
+		tag->setComment(TagLib::String("Create by netease copyright protected dump tool. author 5L", TagLib::String::UTF8));
+
+		audioFile->save();
+		
 	} else if (mFormat == NeteaseCrypt::FLAC) {
 		audioFile = new TagLib::FLAC::File(mDumpFilepath.c_str());
 		tag = audioFile->tag();
@@ -210,17 +221,18 @@ void NeteaseCrypt::FixMetadata() {
 
 			dynamic_cast<TagLib::FLAC::File*>(audioFile)->addPicture(cover);
 		}
+			
+		if (mMetaData != NULL) {
+			tag->setTitle(TagLib::String(mMetaData->name(), TagLib::String::UTF8));
+			tag->setArtist(TagLib::String(mMetaData->artist(), TagLib::String::UTF8));
+			tag->setAlbum(TagLib::String(mMetaData->album(), TagLib::String::UTF8));
+		}
+
+		tag->setComment(TagLib::String("Create by netease copyright protected dump tool. author 5L", TagLib::String::UTF8));
+
+		audioFile->save();
+		
 	}
-
-	if (mMetaData != NULL) {
-		tag->setTitle(TagLib::String(mMetaData->name(), TagLib::String::UTF8));
-		tag->setArtist(TagLib::String(mMetaData->artist(), TagLib::String::UTF8));
-		tag->setAlbum(TagLib::String(mMetaData->album(), TagLib::String::UTF8));
-	}
-
-	tag->setComment(TagLib::String("Create by netease copyright protected dump tool. author 5L", TagLib::String::UTF8));
-
-	audioFile->save();
 }
 
 void NeteaseCrypt::Dump() {
@@ -248,7 +260,7 @@ void NeteaseCrypt::Dump() {
 	n = 0x8000;
 	i = 0;
 
-	unsigned char buffer[n];
+	unsigned char buffer[0x8000];
 
 	std::ofstream output;
 
@@ -313,7 +325,7 @@ NeteaseCrypt::NeteaseCrypt(std::string const& path) {
 		throw std::invalid_argument("broken ncm file");
 	}
 
-	char keydata[n];
+	char* keydata = new char[n];
 	read(keydata, n);
 
 	for (i = 0; i < n; i++) {
@@ -334,7 +346,7 @@ NeteaseCrypt::NeteaseCrypt(std::string const& path) {
 
 		mMetaData = NULL;
 	} else {
-		char modifyData[n];
+		char* modifyData = new char[n];
 		read(modifyData, n);
 
 		for (i = 0; i < n; i++) {
