@@ -22,7 +22,3 @@ Android版本 [DroidNCM](https://github.com/bunnyblueair/DroidNCM)
 
 ## 使用
 	ncmdump [files]...
-
-## 微信捐赠
-
-![wechat-pay](https://raw.githubusercontent.com/anonymous5l/static-resoures/master/wechat-pay.png?raw=true)
