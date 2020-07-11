@@ -1,0 +1,11 @@
+TAGLIB_PATH	= C:/Temp/taglib
+
+CFLAGS	+= -I $(TAGLIB_PATH)/include
+CFLAGS	+= -D TAGLIB_STATIC
+
+LDFLAGS	+= -L $(TAGLIB_PATH)/lib
+LIBS	+= -ltag -lz
+
+all:
+	g++ $(CFLAGS) $(LDFLAGS) main.cpp cJSON.cpp aes.cpp ncmcrypt.cpp -o ncmdump $(LIBS)
+
