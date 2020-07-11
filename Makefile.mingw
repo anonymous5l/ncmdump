@@ -2,6 +2,7 @@ TAGLIB_PATH	= C:/Temp/taglib
 
 CFLAGS	+= -I $(TAGLIB_PATH)/include
 CFLAGS	+= -D TAGLIB_STATIC
+CFLAGS	+= -static
 
 LDFLAGS	+= -L $(TAGLIB_PATH)/lib
 LIBS	+= -ltag -lz
